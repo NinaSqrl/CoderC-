@@ -7,10 +7,15 @@ namespace ProyectofinalCoradini.ADO.NET
     public class ProductoVendidoHandler
     {
         private SqlConnection conexion;
-        private string CadenaConexion = "Server=sql.bsite.net\\MSSQL2016;" +
-            "Database=matiasfernando15_ProyectofinalCoradini;" +
-            "User Id=matiasfernando15_ProyectofinalCoradini;" +
-            "Password=mustang66;";
+        private string CadenaConexion =
+            //"Server = sql.bsite.net\\MSSQL2016;" +
+            //"Database=ajomuch92_coderhouse_csharp_40930;" +
+            //"User Id=ajomuch92_coderhouse_csharp_40930;" +
+            //"Password=ElQuequit0Sexy2022;";
+           "Server=sql.bsite.net\\MSSQL2016;" +
+           "Database=ninasqrl_ProyectofinalCoradini;" +
+           "User Id=ninasqrl_ProyectofinalCoradini;" +
+           "Password=Cleo__24;";
 
         public ProductoVendidoHandler() 
         {

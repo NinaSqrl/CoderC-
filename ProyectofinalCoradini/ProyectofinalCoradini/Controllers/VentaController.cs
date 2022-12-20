@@ -25,5 +25,48 @@ namespace ProyectofinalCoradini.Controllers
                 return Problem(ex.Message);
             }
         }
+
+        [HttpPost]
+        public ActionResult Post([FromBody] Venta venta)
+        {
+            try
+            {
+                bool seCreo = handler.crearVenta(venta);
+                if (seCreo)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+
+        [HttpDelete]
+        public ActionResult Delete([FromBody] int id)
+        {
+            try
+            {
+                bool seElimino = handler.EliminarVenta(id);
+                if (seElimino)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
     }
 }

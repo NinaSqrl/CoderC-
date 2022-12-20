@@ -1,4 +1,5 @@
-﻿using ProyectofinalCoradini.Models;
+﻿using Microsoft.Extensions.Logging;
+using ProyectofinalCoradini.Models;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -7,10 +8,15 @@ namespace ProyectofinalCoradini.ADO.NET
     public class VentaHandler
     {
         private SqlConnection conexion;
-        private string CadenaConexion = "Server=sql.bsite.net\\MSSQL2016;" +
-            "Database=matiasfernando15_ProyectofinalCoradini;" +
-            "User Id=matiasfernando15_ProyectofinalCoradini;" +
-            "Password=mustang66;";
+        private string CadenaConexion =
+            //"Server = sql.bsite.net\\MSSQL2016;" +
+            //"Database=ajomuch92_coderhouse_csharp_40930;" +
+            //"User Id=ajomuch92_coderhouse_csharp_40930;" +
+            //"Password=ElQuequit0Sexy2022;";
+           "Server=sql.bsite.net\\MSSQL2016;" +
+           "Database=ninasqrl_ProyectofinalCoradini;" +
+           "User Id=ninasqrl_ProyectofinalCoradini;" +
+           "Password=Cleo__24;";
 
         public VentaHandler() 
         {
@@ -60,6 +66,88 @@ namespace ProyectofinalCoradini.ADO.NET
                 throw;
             }
             return listaVentas;
+        }
+        // CargarVenta
+        // Carga los datos de la venta a la base de datos
+        // Actualiza el stock en la BD
+
+
+
+
+
+
+        // Eliminar venta
+        // Elimina una venta de la BD y restablece el stock
+
+        public bool EliminarVenta(int id)
+        {
+            if (conexion == null)
+            {
+                throw new Exception("Conexión no establecida");
+            }
+            try
+            {
+                int filasAfectadas = 0;
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM venta WHERE id = @id", conexion))
+                {
+                    conexion.Open();
+                    cmd.Parameters.Add(new SqlParameter("id", SqlDbType.Int) { Value = id });
+                    filasAfectadas = cmd.ExecuteNonQuery();
+                }
+                conexion.Close();
+                return filasAfectadas > 0;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+         public bool crearVenta(Venta venta)
+        {
+            int insertventa = 0;
+            using (SqlCommand cmd = new SqlCommand("insert into venta (Id, Comentarios, IdUsuario) values (@Id, @Comentarios, @IdUsuario)", conexion))
+            {
+                conexion.Open();
+                cmd.Parameters.Add(new SqlParameter("Id", SqlDbType.Int) { Value = venta.Id });
+                cmd.Parameters.Add(new SqlParameter("Comentarios", SqlDbType.VarChar) { Value = venta.Comentarios });
+                cmd.Parameters.Add(new SqlParameter("IdUsuario", SqlDbType.Int) { Value = venta.IdUsuario });
+                insertventa = cmd.ExecuteNonQuery();
+            }
+            
+
+
+            if (insertventa > 0)
+            {
+                foreach (ProductoVendido pv in venta.ProductosVendidos)
+                {
+                    using (SqlCommand cmd = new SqlCommand("insert into productoVendido (Id, Stock, IdProducto, IdVenta) values (@Id, @Stock, @IdProducto, @IdVenta)", conexion))
+                    {
+                        
+                        cmd.Parameters.Add(new SqlParameter("Id", SqlDbType.Int) { Value = pv.Id });
+                        cmd.Parameters.Add(new SqlParameter("Stock", SqlDbType.VarChar) { Value = pv.Stock });
+                        cmd.Parameters.Add(new SqlParameter("IdProducto", SqlDbType.Int) { Value = pv.IdProducto });
+                        cmd.Parameters.Add(new SqlParameter("IdVenta", SqlDbType.Int) { Value = pv.IdVenta });
+                        insertventa = cmd.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand cmd = new SqlCommand("update producto set stock = stock - @stock where id = @Id", conexion))
+                    {
+                        
+                        cmd.Parameters.Add(new SqlParameter("Id", SqlDbType.Int) { Value = pv.IdProducto });
+                        cmd.Parameters.Add(new SqlParameter("Stock", SqlDbType.VarChar) { Value = pv.Stock });
+                        insertventa = cmd.ExecuteNonQuery();
+                    }
+                   
+                }
+
+
+            
+            }
+            conexion.Close();
+            return insertventa > 0;
+
+
         }
     }
 }

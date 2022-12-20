@@ -25,5 +25,86 @@ namespace ProyectofinalCoradini.Controllers
                 return Problem(ex.Message);
             }
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<Producto> Get(int id)
+        {
+            try
+            {
+                Producto producto = handler.ObtenerProducto(id);
+                if (producto != null)
+                {
+                    return Ok(producto);
+                }
+                else
+                {
+                    return NotFound("El producto con id: "+ id +" NO fue encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody] Producto producto)
+        {
+            try
+            {
+                handler.CrearProducto(producto);
+                return StatusCode(StatusCodes.Status201Created, producto);
+            }
+            catch (Exception ex)
+            {
+
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<Producto> Put(int id, [FromBody] Producto productoAActualizar)
+        {
+            try
+            {
+                Producto? productoActualizado = handler.ActualizarProducto(id, productoAActualizar);
+                if (productoActualizado != null)
+                {
+                    return Ok(productoActualizado);
+                }
+                else
+                {
+                    return NotFound("El producto con id: " + id +" NO fue encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return Problem(ex.Message);
+            }
+        }
+
+        
+        [HttpDelete]
+        public ActionResult Delete([FromBody] int id)
+        {
+            try
+            {
+                bool seElimino = handler.EliminarProducto(id);
+                if (seElimino)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
     }
 }
