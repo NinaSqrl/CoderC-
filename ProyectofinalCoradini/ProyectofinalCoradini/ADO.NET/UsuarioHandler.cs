@@ -133,15 +133,16 @@ namespace ProyectofinalCoradini.ADO.NET
             }
             try
             {
-                using (SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(Nombre, Apellido, NombreUsuario, Contrasenia, Mail) VALUES(@nombre, @apellido, @nombreUsuario, @contraseña, @mail); SELECT @@Identity", Conexion))
+                using (SqlCommand cmd = new SqlCommand("INSERT INTO Usuario(id, Nombre, Apellido, NombreUsuario, Contrasenia, Mail) VALUES(@id, @nombre, @apellido, @nombreUsuario, @contraseña, @mail)", Conexion))
                 {
                     Conexion.Open();
+                    cmd.Parameters.Add(new SqlParameter("id", SqlDbType.Int) { Value = usuario.Id });
                     cmd.Parameters.Add(new SqlParameter("nombre", SqlDbType.VarChar) { Value = usuario.Nombre });
                     cmd.Parameters.Add(new SqlParameter("apellido", SqlDbType.VarChar) { Value = usuario.Apellido });
                     cmd.Parameters.Add(new SqlParameter("nombreUsuario", SqlDbType.VarChar) { Value = usuario.NombreUsuario });
                     cmd.Parameters.Add(new SqlParameter("contraseña", SqlDbType.VarChar) { Value = usuario.Contrasenia });
                     cmd.Parameters.Add(new SqlParameter("mail", SqlDbType.VarChar) { Value = usuario.Mail });
-                    usuario.Id = int.Parse(cmd.ExecuteScalar().ToString());
+                    cmd.ExecuteNonQuery();
                     return usuario;
                 }
             }
@@ -232,49 +233,7 @@ namespace ProyectofinalCoradini.ADO.NET
                 Conexion.Close();
             }
         }
-        //
-        /*
-        public Usuario GetUsuariodesdePassword(string Password, string Mail)
-        {
-            if (Conexion == null)
-            {
-                throw new Exception("Conexión no realizada");
-            }
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM Usuario WHERE Contrasenia = @Password and Mail= @Mail", Conexion))
-                {
-                    Conexion.Open();
-                    cmd.Parameters.Add(new SqlParameter("ID", SqlDbType.BigInt) { Value = UserName });
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            reader.Read();
-                            Usuario usuario = CargarUsuarioDesdeReader(reader);
-                            return usuario;
-                        }
-                        else
-                        {
-                            return null;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                Conexion.Close();
-            }
-        }
-
-        */
-
-        //
+       
         public Usuario GetUsuariodesdeUserName(string UserName)
         {
             if (Conexion == null)
@@ -301,6 +260,34 @@ namespace ProyectofinalCoradini.ADO.NET
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                Conexion.Close();
+            }
+        }
+
+        public bool EliminarUsuario(int id)
+        {
+            if (Conexion == null)
+            {
+                throw new Exception("Conexión no realizada");
+            }
+            try
+            {
+                int filasAfectadas = 0;
+                using (SqlCommand cmd = new SqlCommand("DELETE FROM usuario WHERE Id = @id", Conexion))
+                {
+                    Conexion.Open();
+                    cmd.Parameters.Add(new SqlParameter("id", SqlDbType.Int) { Value = id });
+                    filasAfectadas = cmd.ExecuteNonQuery();
+                }
+                return filasAfectadas > 0;
             }
             catch (Exception)
             {

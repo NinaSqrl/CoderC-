@@ -40,9 +40,9 @@ namespace ProyectofinalCoradini.ADO.NET
             }
             try
             {
+                conexion.Open();
                 using (SqlCommand command = new SqlCommand ("SELECT * FROM Venta", conexion))
                 {
-                    conexion.Open();
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.HasRows)
@@ -58,6 +58,8 @@ namespace ProyectofinalCoradini.ADO.NET
                         }
                     }
                 }
+
+
                 conexion.Close();
             }
             catch (Exception)
@@ -67,19 +69,11 @@ namespace ProyectofinalCoradini.ADO.NET
             }
             return listaVentas;
         }
-        // CargarVenta
-        // Carga los datos de la venta a la base de datos
-        // Actualiza el stock en la BD
-
-
-
-
-
-
+       
         // Eliminar venta
         // Elimina una venta de la BD y restablece el stock
 
-        public bool EliminarVenta(int id)
+        public bool eliminarVenta(int id)
         {
             if (conexion == null)
             {
@@ -87,15 +81,23 @@ namespace ProyectofinalCoradini.ADO.NET
             }
             try
             {
-                int filasAfectadas = 0;
+                int deleteventa = 0;
+
+                conexion.Open();
+                using (SqlCommand cmd = new SqlCommand("delete from productovendido where idventa = @Id", conexion))
+                {
+
+                    cmd.Parameters.Add(new SqlParameter("Id", SqlDbType.Int) { Value = id });
+                    deleteventa = cmd.ExecuteNonQuery();
+                }
                 using (SqlCommand cmd = new SqlCommand("DELETE FROM venta WHERE id = @id", conexion))
                 {
-                    conexion.Open();
+                    
                     cmd.Parameters.Add(new SqlParameter("id", SqlDbType.Int) { Value = id });
-                    filasAfectadas = cmd.ExecuteNonQuery();
+                    deleteventa = cmd.ExecuteNonQuery();
                 }
                 conexion.Close();
-                return filasAfectadas > 0;
+                return deleteventa > 0;
             }
             catch
             {
@@ -149,5 +151,6 @@ namespace ProyectofinalCoradini.ADO.NET
 
 
         }
+        
     }
 }

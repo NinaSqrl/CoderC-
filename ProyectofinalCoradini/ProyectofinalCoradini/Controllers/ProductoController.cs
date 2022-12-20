@@ -86,8 +86,8 @@ namespace ProyectofinalCoradini.Controllers
         }
 
         
-        [HttpDelete]
-        public ActionResult Delete([FromBody] int id)
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace ProyectofinalCoradini.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound("El producto con id: " + id + " NO fue encontrado");
                 }
             }
             catch (Exception ex)

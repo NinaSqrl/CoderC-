@@ -33,42 +33,7 @@ namespace ProyectofinalCoradini.ADO.NET
             }
         }
 
-        public List<Producto> listarProductos()
-        {
-            List<Producto> lista = new List<Producto>();
-            if (conexion == null)
-            {
-                throw new Exception("Conexión no establecida");
-            }
-            try
-            {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM producto", conexion))
-                {
-                    conexion.Open();
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.HasRows)
-                        {
-                            while (reader.Read())
-                            {
-                                Producto producto = getProductofromReader(reader);
-                                lista.Add(producto);
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                throw;
-            }
-            finally
-            {
-                conexion.Close();
-            }
-            return lista;
-        }
-
+        
         public List<Producto> GetProductos()
         {
             List<Producto> listaProductos = new List<Producto>();
@@ -257,7 +222,7 @@ namespace ProyectofinalCoradini.ADO.NET
                 using (SqlCommand cmd = new SqlCommand("DELETE FROM Producto WHERE Id = @id", conexion))
                 {
                     conexion.Open();
-                    cmd.Parameters.Add(new SqlParameter("id", SqlDbType.BigInt) { Value = id });
+                    cmd.Parameters.Add(new SqlParameter("id", SqlDbType.Int) { Value = id });
                     filasAfectadas = cmd.ExecuteNonQuery();
                 }
                 return filasAfectadas > 0;

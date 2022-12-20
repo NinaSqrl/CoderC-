@@ -38,7 +38,7 @@ namespace ProyectofinalCoradini.ADO.NET
             }
             try
             {
-                using (SqlCommand cmd = new SqlCommand("SELECT * FROM usuario WHERE NombreUsuario = @NombreUsuario AND Contraseña = @Contrasenia", conexion))
+                using (SqlCommand cmd = new SqlCommand("SELECT * FROM usuario WHERE NombreUsuario = @NombreUsuario AND Contrasenia = @Contrasenia", conexion))
                 {
                     conexion.Open();
                     cmd.Parameters.Add(new SqlParameter("NombreUsuario", SqlDbType.VarChar) { Value = usuario.NombreUsuario });

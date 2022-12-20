@@ -18,7 +18,7 @@ namespace ProyectofinalCoradini.Controllers
             try
             {
                 bool usuarioExiste = handler.LoginUsuario(usuario);
-                return usuarioExiste ? Ok() : NotFound();
+                return usuarioExiste ? Ok() : NotFound("Usuario o contraseña incorrectos");
             }
             catch (Exception ex)
             {

@@ -48,19 +48,19 @@ namespace ProyectofinalCoradini.Controllers
         }
 
 
-        [HttpDelete]
-        public ActionResult Delete([FromBody] int id)
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
         {
             try
             {
-                bool seElimino = handler.EliminarVenta(id);
+                bool seElimino = handler.eliminarVenta(id);
                 if (seElimino)
                 {
                     return Ok();
                 }
                 else
                 {
-                    return NotFound();
+                    return NotFound("La venta con id: " + id + " NO fue encontrada");
                 }
             }
             catch (Exception ex)

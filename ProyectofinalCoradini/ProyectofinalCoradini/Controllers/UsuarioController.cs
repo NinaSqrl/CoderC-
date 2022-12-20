@@ -82,6 +82,43 @@ namespace ProyectofinalCoradini.Controllers
         {
             return handler.ActualizarUsuario(id, usuarioModificado);
         }
+
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                bool seElimino = handler.EliminarUsuario(id);
+                if (seElimino)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound("El usuario con id: " + id + " NO fue encontrado");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody] Usuario usuario)
+        {
+            try
+            {
+                handler.CrearUsuario(usuario);
+                return StatusCode(StatusCodes.Status201Created, usuario);
+            }
+            catch (Exception ex)
+            {
+
+                return Problem(ex.Message);
+            }
+        }
     }
     //
 }
